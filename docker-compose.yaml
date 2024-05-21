@@ -2,7 +2,7 @@ version: '1.0'
 
 services:
   productservice:
-    image: souvikiiitb/spe-productservice:latest  # Replace with your Docker Hub username and correct image name
+    image: souvikiiitb/speproject-productservice:latest  # Replace with your Docker Hub username and correct image name
     ports:
       - "8081:8081"
     depends_on:
@@ -17,7 +17,7 @@ services:
       - springboot-mysql-network
 
   cartservice:
-    image: souvikiiitb/spe-cartservice:latest  # Replace with your Docker Hub username and correct image name
+    image: souvikiiitb/speproject-cartservice:latest  # Replace with your Docker Hub username and correct image name
     ports:
       - "8083:8083"
     depends_on:
@@ -33,7 +33,7 @@ services:
       - springboot-mysql-network
   
   otpservice:
-    image: souvikiiitb/spe-otpservice:latest  # Replace with your Docker Hub username and correct image name
+    image: souvikiiitb/speproject-otpservice:latest  # Replace with your Docker Hub username and correct image name
     ports:
       - "8084:8084"
     depends_on:
@@ -48,9 +48,9 @@ services:
       - springboot-mysql-network
 
   loginservice:
-    image: souvikiiitb/spe-loginservice:latest  # Replace with your Docker Hub username and correct image name
+    image: souvikiiitb/speproject-loginservice:latest  # Replace with your Docker Hub username and correct image name
     ports:
-      - "8080:8080"
+      - "8085:8080"
     depends_on:
       - otpservice          
     environment:
@@ -63,7 +63,7 @@ services:
       - springboot-mysql-network
   
   orderservice:
-    image: souvikiiitb/spe-orderservice:latest  # Replace with your Docker Hub username and correct image name
+    image: souvikiiitb/speproject-orderservice:latest  # Replace with your Docker Hub username and correct image name
     ports:
       - "8082:8082"
     depends_on:
@@ -80,7 +80,7 @@ services:
       - springboot-mysql-network
 
   apigatewayservice:
-    image: souvikiiitb/spe-apigatewayservice:latest  # Replace with your Docker Hub username and correct image name
+    image: souvikiiitb/speproject-apigatewayservice:latest  # Replace with your Docker Hub username and correct image name
     ports:
       - "8765:8765"
     depends_on:
@@ -103,14 +103,14 @@ services:
       - springboot-mysql-network
 
   eurekaserver:
-    image: souvikiiitb/spe-eurekaserver:latest  # Replace with your Docker Hub username and correct image name
+    image: souvikiiitb/speproject-eurekaserver:latest  # Replace with your Docker Hub username and correct image name
     ports:
       - "8761:8761"
     networks:
       - springboot-mysql-network
 
   frontend:
-    image: souvikiiitb/spe-frontend:latest  # Replace with your Docker Hub username and correct image name
+    image: souvikiiitb/speproject-frontend:latest  # Replace with your Docker Hub username and correct image name
     ports:
       - "3000:3000"
     depends_on:

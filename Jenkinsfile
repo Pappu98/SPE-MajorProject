@@ -108,6 +108,13 @@ pipeline {
                 }
             }
         }
+        stage('Ansible Deployment') {
+            steps {
+                script { 
+                    sh 'ansible-playbook -i inventory.ini deploy.yaml'
+                }
+            }
+        }
     }
 
     post {
