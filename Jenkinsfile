@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKERHUB_USERNAME = 'souvikiiitb'
         DOCKERHUB_PASSWORD = 'electronicscity@2023'
-        IMAGE_NAME_PREFIX = 'souvikiiitb/speProject'
+        IMAGE_NAME_PREFIX = 'souvikiiitb/speproject'
         GITHUB_REPO_URL='https://github.com/Pappu98/SPE-MajorProject.git'
     }
 
@@ -24,8 +24,8 @@ pipeline {
                         script {
                             dockerImage = docker.build("${IMAGE_NAME_PREFIX}-productservice", "./Backend/ProductManagement/Dockerfile")
                             sh "docker login --username ${DOCKERHUB_USERNAME} --password ${DOCKERHUB_PASSWORD}"
-                            sh "docker tag ${IMAGE_NAME_PREFIX}-productservice ${DOCKERHUB_USERNAME}/speProject-productservice:latest"
-                            sh "docker push ${DOCKERHUB_USERNAME}/speProject-productservice:latest"
+                            sh "docker tag ${IMAGE_NAME_PREFIX}-productservice ${DOCKERHUB_USERNAME}/speproject-productservice:latest"
+                            sh "docker push ${DOCKERHUB_USERNAME}/speproject-productservice:latest"
                         }
                     }
                 }
@@ -35,8 +35,8 @@ pipeline {
                         script {
                             dockerImage = docker.build("${IMAGE_NAME_PREFIX}-cartservice", "./Backend/ShoppingCartManagement/Dockerfile")
                             sh "docker login --username ${DOCKERHUB_USERNAME} --password ${DOCKERHUB_PASSWORD}"
-                            sh "docker tag ${IMAGE_NAME_PREFIX}-cartservice ${DOCKERHUB_USERNAME}/speProject-cartservice:latest"
-                            sh "docker push ${DOCKERHUB_USERNAME}/speProject-cartservice:latest"
+                            sh "docker tag ${IMAGE_NAME_PREFIX}-cartservice ${DOCKERHUB_USERNAME}/speproject-cartservice:latest"
+                            sh "docker push ${DOCKERHUB_USERNAME}/speproject-cartservice:latest"
                         }
                     }
                 }
@@ -46,8 +46,8 @@ pipeline {
                         script {
                             dockerImage = docker.build("${IMAGE_NAME_PREFIX}-otpservice", "./Backend/OtpManagement/Dockerfile")
                             sh "docker login --username ${DOCKERHUB_USERNAME} --password ${DOCKERHUB_PASSWORD}"
-                            sh "docker tag ${IMAGE_NAME_PREFIX}-otpservice ${DOCKERHUB_USERNAME}/speProject-otpservice:latest"
-                            sh "docker push ${DOCKERHUB_USERNAME}/speProject-otpservice:latest"
+                            sh "docker tag ${IMAGE_NAME_PREFIX}-otpservice ${DOCKERHUB_USERNAME}/speproject-otpservice:latest"
+                            sh "docker push ${DOCKERHUB_USERNAME}/speproject-otpservice:latest"
                         }
                     }
                 }
@@ -57,8 +57,8 @@ pipeline {
                         script {
                             dockerImage = docker.build("${IMAGE_NAME_PREFIX}-loginservice", "./Backend/LoginManagement/Dockerfile")
                             sh "docker login --username ${DOCKERHUB_USERNAME} --password ${DOCKERHUB_PASSWORD}"
-                            sh "docker tag ${IMAGE_NAME_PREFIX}-loginservice ${DOCKERHUB_USERNAME}/speProject-loginservice:latest"
-                            sh "docker push ${DOCKERHUB_USERNAME}/speProject-loginservice:latest"
+                            sh "docker tag ${IMAGE_NAME_PREFIX}-loginservice ${DOCKERHUB_USERNAME}/speproject-loginservice:latest"
+                            sh "docker push ${DOCKERHUB_USERNAME}/speproject-loginservice:latest"
                         }
                     }
                 }
@@ -68,8 +68,8 @@ pipeline {
                         script {
                             dockerImage = docker.build("${IMAGE_NAME_PREFIX}-orderservice", "./Backend/OrderManagement/Dockerfile")
                             sh "docker login --username ${DOCKERHUB_USERNAME} --password ${DOCKERHUB_PASSWORD}"
-                            sh "docker tag ${IMAGE_NAME_PREFIX}-orderservice ${DOCKERHUB_USERNAME}/speProject-orderservice:latest"
-                            sh "docker push ${DOCKERHUB_USERNAME}/speProject-orderservice:latest"
+                            sh "docker tag ${IMAGE_NAME_PREFIX}-orderservice ${DOCKERHUB_USERNAME}/speproject-orderservice:latest"
+                            sh "docker push ${DOCKERHUB_USERNAME}/speproject-orderservice:latest"
                         }
                     }
                 }
@@ -79,8 +79,8 @@ pipeline {
                         script {
                             dockerImage = docker.build("${IMAGE_NAME_PREFIX}-apigatewayservice", "./Backend/API-GATEWAY/API-GATEWAY/Dockerfile")
                             sh "docker login --username ${DOCKERHUB_USERNAME} --password ${DOCKERHUB_PASSWORD}"
-                            sh "docker tag ${IMAGE_NAME_PREFIX}-apigatewayservice ${DOCKERHUB_USERNAME}/speProject-apigatewayservice:latest"
-                            sh "docker push ${DOCKERHUB_USERNAME}/speProject-apigatewayservice:latest"
+                            sh "docker tag ${IMAGE_NAME_PREFIX}-apigatewayservice ${DOCKERHUB_USERNAME}/speproject-apigatewayservice:latest"
+                            sh "docker push ${DOCKERHUB_USERNAME}/speproject-apigatewayservice:latest"
                         }
                     }
                 }
@@ -90,8 +90,8 @@ pipeline {
                         script {
                             dockerImage = docker.build("${IMAGE_NAME_PREFIX}-eurekaserver", "./Backend/EurekaServer/EurekaServer/Dockerfile")
                             sh "docker login --username ${DOCKERHUB_USERNAME} --password ${DOCKERHUB_PASSWORD}"
-                            sh "docker tag ${IMAGE_NAME_PREFIX}-eurekaserver ${DOCKERHUB_USERNAME}/speProject-eurekaserver:latest"
-                            sh "docker push ${DOCKERHUB_USERNAME}/speProject-eurekaserver:latest"
+                            sh "docker tag ${IMAGE_NAME_PREFIX}-eurekaserver ${DOCKERHUB_USERNAME}/speproject-eurekaserver:latest"
+                            sh "docker push ${DOCKERHUB_USERNAME}/speproject-eurekaserver:latest"
                         }
                     }
                 }
@@ -101,8 +101,8 @@ pipeline {
                         script {
                             dockerImage = docker.build("${IMAGE_NAME_PREFIX}-frontend", "./Frontend/amazon-clone/Dockerfile")
                             sh "docker login --username ${DOCKERHUB_USERNAME} --password ${DOCKERHUB_PASSWORD}"
-                            sh "docker tag ${IMAGE_NAME_PREFIX}-frontend ${DOCKERHUB_USERNAME}/speProject-frontend:latest"
-                            sh "docker push ${DOCKERHUB_USERNAME}/speProject-frontend:latest"
+                            sh "docker tag ${IMAGE_NAME_PREFIX}-frontend ${DOCKERHUB_USERNAME}/speproject-frontend:latest"
+                            sh "docker push ${DOCKERHUB_USERNAME}/speproject-frontend:latest"
                         }
                     }
                 }
