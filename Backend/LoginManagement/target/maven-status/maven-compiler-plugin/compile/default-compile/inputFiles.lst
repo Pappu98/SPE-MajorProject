@@ -1,0 +1,9 @@
+D:\SPE\Backend\LoginManagement\src\main\java\com\example\LoginManagement\feignClient\OtpClient.java
+D:\SPE\Backend\LoginManagement\src\main\java\com\example\LoginManagement\LoginManagementApplication.java
+D:\SPE\Backend\LoginManagement\src\main\java\com\example\LoginManagement\data\entities\CredentialsEntity.java
+D:\SPE\Backend\LoginManagement\src\main\java\com\example\LoginManagement\exception\NoOtpException.java
+D:\SPE\Backend\LoginManagement\src\main\java\com\example\LoginManagement\domain\model\CredentialsReq.java
+D:\SPE\Backend\LoginManagement\src\main\java\com\example\LoginManagement\domain\services\CredentialsService.java
+D:\SPE\Backend\LoginManagement\src\main\java\com\example\LoginManagement\data\dao\CredentialsDao.java
+D:\SPE\Backend\LoginManagement\src\main\java\com\example\LoginManagement\controller\CredentialsController.java
+D:\SPE\Backend\LoginManagement\src\main\java\com\example\LoginManagement\domain\model\OtpResponse.java
