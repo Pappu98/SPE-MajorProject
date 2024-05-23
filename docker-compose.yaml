@@ -121,7 +121,7 @@ services:
       - springboot-mysql-network
 
   eurekaserver:
-    image: souvikiiitb/eurekaserver:latest  # Replace with your Docker Hub username and correct image name
+    image: souvikiiitb/speproject-eurekaserver:latest  # Replace with your Docker Hub username and correct image name
     ports:
       - "8761:8761"
     environment:      
