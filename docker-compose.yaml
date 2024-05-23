@@ -1,8 +1,8 @@
-version: '1.0'
+version: '3.8'
 
 services:
   productservice:
-    image: souvikiiitb/speproject-productservice:latest  # Replace with your Docker Hub username and correct image name
+    image: souvikiiitb/speproject-productservice:latest
     ports:
       - "8081:8081"
     depends_on:
@@ -12,15 +12,12 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb:3306/groceryapp
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=Pappu@1999
-      - eureka.client.serviceUrl.defaultZone=http://eurekaserver:8761/eureka/
-      - logging.file.name=../logs/productservice/app.log    
-    volumes:
-      - ./Backend/logs/productservice:/app/logs/productservice
+      - eureka.client.serviceUrl.defaultZone=http://eurekaserver:8761/eureka/                
     networks:
       - springboot-mysql-network
 
   cartservice:
-    image: souvikiiitb/speproject-cartservice:latest  # Replace with your Docker Hub username and correct image name
+    image: souvikiiitb/speproject-cartservice:latest
     ports:
       - "8083:8083"
     depends_on:
@@ -31,15 +28,12 @@ services:
       - SPRING_DATASOURCE_PASSWORD=Pappu@1999
       - eureka.client.serviceUrl.defaultZone=http://eurekaserver:8761/eureka/
       - SPRING_PROFILES_ACTIVE=docker
-      - productservice.url=http://productservice:8081/product-service
-      - logging.file.name=../logs/cartservice/app.log      
-    volumes:
-      - ./Backend/logs/cartservice:/app/logs/cartservice
+      - productservice.url=http://productservice:8081/product-service                
     networks:
       - springboot-mysql-network
   
   otpservice:
-    image: souvikiiitb/speproject-otpservice:latest  # Replace with your Docker Hub username and correct image name
+    image: souvikiiitb/speproject-otpservice:latest
     ports:
       - "8084:8084"
     depends_on:
@@ -49,15 +43,12 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb:3306/groceryapp
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=Pappu@1999
-      - eureka.client.serviceUrl.defaultZone=http://eurekaserver:8761/eureka/
-      - logging.file.name=../logs/otpservice/app.log   
-    volumes:
-      - ./Backend/logs/otpservice:/app/logs/otpservice
+      - eureka.client.serviceUrl.defaultZone=http://eurekaserver:8761/eureka/              
     networks:
       - springboot-mysql-network
 
   loginservice:
-    image: souvikiiitb/speproject-loginservice:latest  # Replace with your Docker Hub username and correct image name
+    image: souvikiiitb/speproject-loginservice:latest
     ports:
       - "8085:8080"
     depends_on:
@@ -68,14 +59,15 @@ services:
       - SPRING_DATASOURCE_PASSWORD=Pappu@1999
       - eureka.client.serviceUrl.defaultZone=http://eurekaserver:8761/eureka/
       - otpservice.url=http://otpservice:8084/otp-service
-      - logging.file.name=../logs/loginservice/app.log      
+      - LOGGING_LOGSTASH_HOST=logstash
+      - LOGGING_LOGSTASH_PORT=5001       
     volumes:
-      - ./Backend/logs/loginservice:/app/logs/loginservice
+      - ./logs:/logs      
     networks:
       - springboot-mysql-network
   
   orderservice:
-    image: souvikiiitb/speproject-orderservice:latest  # Replace with your Docker Hub username and correct image name
+    image: souvikiiitb/speproject-orderservice:latest
     ports:
       - "8082:8082"
     depends_on:
@@ -87,24 +79,18 @@ services:
       - SPRING_DATASOURCE_PASSWORD=Pappu@1999
       - eureka.client.serviceUrl.defaultZone=http://eurekaserver:8761/eureka/
       - productservice.url=http://productservice:8081/product-service
-      - cartservice.url=http://cartservice:8083/cart-service
-      - logging.file.name=../logs/orderservice/app.log      
-    volumes:
-      - ./Backend/logs/orderservice:/app/logs/orderservice
+      - cartservice.url=http://cartservice:8083/cart-service             
     networks:
       - springboot-mysql-network
 
   apigatewayservice:
-    image: souvikiiitb/speproject-apigatewayservice:latest  # Replace with your Docker Hub username and correct image name
+    image: souvikiiitb/speproject-apigatewayservice:latest
     ports:
       - "8765:8765"
     depends_on:
       - eurekaserver      
     environment:
-      - eureka.client.serviceUrl.defaultZone=http://eurekaserver:8761/eureka/
-      - logging.file.name=../logs/apigatewayservice/app.log      
-    volumes:
-      - ./Backend/logs/apigatewayservice:/app/logs/apigatewayservice
+      - eureka.client.serviceUrl.defaultZone=http://eurekaserver:8761/eureka/                    
     networks:
       - springboot-mysql-network
 
@@ -121,27 +107,76 @@ services:
       - springboot-mysql-network
 
   eurekaserver:
-    image: souvikiiitb/speproject-eurekaserver:latest  # Replace with your Docker Hub username and correct image name
+    image: souvikiiitb/speproject-eurekaserver:latest
     ports:
-      - "8761:8761"
-    environment:      
-      - logging.file.name=../logs/eurekaserver/app.log
-    volumes:
-      - ./Backend/logs/eurekaserver:/app/logs/eurekaserver
+      - "8761:8761"          
     networks:
       - springboot-mysql-network
 
   frontend:
-    image: souvikiiitb/speproject-frontend:latest  # Replace with your Docker Hub username and correct image name
+    image: souvikiiitb/speproject-frontend:latest
     ports:
       - "3000:3000"
     depends_on:
       - apigatewayservice
     networks:
       - springboot-mysql-network  
-    
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.3.3
+    container_name: elasticsearch
+    restart: always
+    environment:
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+      - network.host=0.0.0.0
+      - http.port=9200
+    ports:
+      - "9200:9200"
+    networks:
+      - springboot-mysql-network
+    volumes:
+      - elastic_data:/usr/share/elasticsearch/data
+      - ./Backend/elasticsearch/elasticsearch.yaml:/usr/share/elasticsearch/config/elasticsearch.yaml
+      - ./Backend/elasticsearch:/var/log/elasticsearch
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.3.3
+    container_name: kibana
+    restart: always
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    networks:
+      - springboot-mysql-network
+    depends_on:
+      - elasticsearch
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.3.3
+    container_name: logstash
+    restart: always
+    volumes:
+      - ./Backend/logstash/config/logstash.yaml:/usr/share/logstash/config/logstash.yaml:ro
+      - ./Backend/logstash/pipeline:/usr/share/logstash/pipeline:ro
+    environment:
+      - LS_JAVA_OPTS=-Xmx512m -Xms512m
+    ports:
+      - "5001:5001/tcp"
+      - "5001:5001/udp"
+      - "9600:9600"
+    networks:
+      - springboot-mysql-network
+    depends_on:
+      - elasticsearch  
+
 volumes:
   mysql-data:
+  elastic_data:
+    driver: local
 
 networks:
   springboot-mysql-network:
