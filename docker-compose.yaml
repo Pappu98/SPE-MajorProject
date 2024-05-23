@@ -13,6 +13,9 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=Pappu@1999
       - eureka.client.serviceUrl.defaultZone=http://eurekaserver:8761/eureka/
+      - logging.file.name=../logs/productservice/app.log    
+    volumes:
+      - ./Backend/logs/productservice:/app/logs/productservice
     networks:
       - springboot-mysql-network
 
@@ -29,6 +32,9 @@ services:
       - eureka.client.serviceUrl.defaultZone=http://eurekaserver:8761/eureka/
       - SPRING_PROFILES_ACTIVE=docker
       - productservice.url=http://productservice:8081/product-service
+      - logging.file.name=../logs/cartservice/app.log      
+    volumes:
+      - ./Backend/logs/cartservice:/app/logs/cartservice
     networks:
       - springboot-mysql-network
   
@@ -44,6 +50,9 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=Pappu@1999
       - eureka.client.serviceUrl.defaultZone=http://eurekaserver:8761/eureka/
+      - logging.file.name=../logs/otpservice/app.log   
+    volumes:
+      - ./Backend/logs/otpservice:/app/logs/otpservice
     networks:
       - springboot-mysql-network
 
@@ -59,6 +68,9 @@ services:
       - SPRING_DATASOURCE_PASSWORD=Pappu@1999
       - eureka.client.serviceUrl.defaultZone=http://eurekaserver:8761/eureka/
       - otpservice.url=http://otpservice:8084/otp-service
+      - logging.file.name=../logs/loginservice/app.log      
+    volumes:
+      - ./Backend/logs/loginservice:/app/logs/loginservice
     networks:
       - springboot-mysql-network
   
@@ -76,6 +88,9 @@ services:
       - eureka.client.serviceUrl.defaultZone=http://eurekaserver:8761/eureka/
       - productservice.url=http://productservice:8081/product-service
       - cartservice.url=http://cartservice:8083/cart-service
+      - logging.file.name=../logs/orderservice/app.log      
+    volumes:
+      - ./Backend/logs/orderservice:/app/logs/orderservice
     networks:
       - springboot-mysql-network
 
@@ -86,7 +101,10 @@ services:
     depends_on:
       - eurekaserver      
     environment:
-      - eureka.client.serviceUrl.defaultZone=http://eurekaserver:8761/eureka/      
+      - eureka.client.serviceUrl.defaultZone=http://eurekaserver:8761/eureka/
+      - logging.file.name=../logs/apigatewayservice/app.log      
+    volumes:
+      - ./Backend/logs/apigatewayservice:/app/logs/apigatewayservice
     networks:
       - springboot-mysql-network
 
@@ -103,9 +121,13 @@ services:
       - springboot-mysql-network
 
   eurekaserver:
-    image: souvikiiitb/speproject-eurekaserver:latest  # Replace with your Docker Hub username and correct image name
+    image: souvikiiitb/eurekaserver:latest  # Replace with your Docker Hub username and correct image name
     ports:
       - "8761:8761"
+    environment:      
+      - logging.file.name=../logs/eurekaserver/app.log
+    volumes:
+      - ./Backend/logs/eurekaserver:/app/logs/eurekaserver
     networks:
       - springboot-mysql-network
 
@@ -118,6 +140,46 @@ services:
     networks:
       - springboot-mysql-network
 
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.6
+    ports:
+      - 9200:9200
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m          
+    networks:
+      - springboot-mysql-network
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.17.6
+    volumes:
+      - ./Backend/logstash/pipeline/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    ports:
+      - "5044:5044"
+    networks:
+      - springboot-mysql-network
+    depends_on:
+      - elasticsearch
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.17.6
+    ports:
+      - "5601:5601"
+    networks:
+      - springboot-mysql-network
+    depends_on:
+      - elasticsearch
+  
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:7.17.6
+    volumes:
+      - ./Backend/filebeat.yaml:/usr/share/filebeat/filebeat.yaml
+      - ./Backend/logs:/usr/share/filebeat/logs
+    networks:
+      - springboot-mysql-network
+    depends_on:
+      - logstash
+    
 volumes:
   mysql-data:
 
